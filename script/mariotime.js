@@ -65,7 +65,22 @@ function keyDownHandler(e) {
       
     // Space
     case 32:
-      playEffect('smb3_jump.mp3');
+      if (!sprite.hasClass('mario-jump')) {
+        playEffect('smb3_jump.mp3');
+        sprite.swapClass('mario-stand','mario-jump');
+        sprite.parent().animate({
+          paddingTop: '350px',
+          height: '82px'
+        }, {
+          duration: 200
+        });
+        sprite.parent().animate({
+          paddingTop: '380px',
+          height: '52px'
+        }, {
+          duration: 200
+        });
+      }
       break;
       
     // Left
@@ -89,13 +104,20 @@ function keyUpHandler(e) {
       sprite.swapClass('mario-crouch','mario-stand');
       break;
       
+    // Space
+    case 32:
+      if (sprite.hasClass('mario-jump')) {
+        sprite.swapClass('mario-jump','mario-stand');
+      }
+      break;
+      
     // Left
     case 37:
       walkDirection('left',true);
       break;
     // Right
     case 39:
-      walkDirection('right', true);
+      walkDirection('right',true);
       break;
   }
 }
