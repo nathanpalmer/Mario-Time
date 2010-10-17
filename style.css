@@ -47,5 +47,10 @@
 
 .mario-jump.facing-right
 {
-  background-position: -400px -279px;
+  background-position: -451px -279px;
+}
+
+.mario-jump.facing-left
+{
+  background-position: -100px -279px;
 }
