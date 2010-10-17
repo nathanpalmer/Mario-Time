@@ -17,11 +17,7 @@ function walk(keyUp) {
           var marginLeft = parseInt(sprite.css('margin-left').replace('px',''))+(t.movePixels * (sprite.hasClass('facing-left') ? -1 : 1));
           sprite.css('margin-left', marginLeft + 'px');
         }                          
-        
-        if (t.loop) {
-          setTimeout('walk()', duration);
-        }
-        
+       
         return;
     }
   }       
