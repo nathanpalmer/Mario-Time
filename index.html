@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <title>Mario Time!</title>
+  
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="http://www.google.com/jsapi?key=ABQIAAAA27qmOYmJ1cd_euUyA428JxS09Cd8RddvO_ZkS8ZD53tpwyaA5RSpRaL1s027QqiM4lZAzoISAs9KKA" type="text/javascript"></script>
+    <script type="text/javascript">
+      google.load("jquery", "1.4.3");
+      google.load("jqueryui", "1.8.5");
+    </script>
+    
+    <script type="text/javascript">
+      var currentOrientation = 'right';
+      
+      var transitions = [
+          { currentClass: 'mario-stand-right', nextClass: 'mario-walk-right', movePixels: 0, loop: false },
+          { currentClass: 'mario-walk-right', nextClass: 'mario-stand-right', movePixels: 10, loop: false },
+          { currentClass: 'mario-stand-left', nextClass: 'mario-walk-left', movePixels: 0, loop: false },
+          { currentClass: 'mario-walk-left', nextClass: 'mario-stand-left', movePixels: -10, loop: false }
+        ];;
+    
+      function walk() {
+        var sprite = $('#sprite');
+        var duration = 100;
+              
+        for(i=0;i<transitions.length;i++) {
+          var t = transitions[i];
+          if (sprite.hasClass(t.currentClass)) {
+              sprite.removeClass(t.currentClass);
+              sprite.addClass(t.nextClass);
+                          
+              if (t.movePixels) {
+                var marginLeft = parseInt(sprite.css('margin-left').replace('px',''))+t.movePixels;
+                sprite.css('margin-left', marginLeft + 'px');
+              }                          
+              
+              if (t.loop) {
+                setTimeout('walk()', duration);
+              }
+              
+              return;
+          }
+        }       
+      }
+      
+      function walkRight() {
+        if (currentOrientation != 'right') {
+          $('#sprite').css('mario mario-stand-right');
+          currentOrientation = 'right';
+        }
+        
+        walk();
+      }
+      
+      function walkLeft() {
+        if (currentOrientation != 'left') {
+          $('#sprite').css('mario mario-stand-left');
+          currentOrientation = 'left';
+        }
+        
+        walk();
+      }
+      
+      function keyDownHandler(e) {
+        switch(e.keyCode)
+        {
+          // Down
+          case 40:
+            $('#sprite').attr('class', 'mario mario-crouch-' + currentOrientation);
+            break;
+            
+          // Left
+          case 37:
+            walkLeft();
+            break;
+            
+          // Right
+          case 39:           
+            walkRight();
+            break;
+        }
+        
+        //$(window).unbind('keyDown').one('keydown', keyDownHandler);
+      }
+    
+      $(document).ready(function() {
+        //$(window).one('keydown', keyDownHandler);
+        $(window).keydown(keyDownHandler);
+        $(window).keyup(function(e) {
+          var sprite = $('#sprite');
+          
+          switch(e.keyCode)
+        {
+          // Down
+          case 40:
+            sprite.attr('class', 'mario mario-stand-' + currentOrientation);
+            break;
+            
+          // Left
+          case 37:
+            walkLeft();
+            break;
+            
+          // Right
+          case 39:           
+            walkRight();
+            break;
+        }
+        
+          //$(window).unbind('keyDown').one('keyDown', keyDownHandler);
+        });
+      });
+    </script>    
+  </head>
+  <body>
+    <!--<audio src="music/smb3-world1.mp3" autoplay="true" loop="true" preload="auto" autobuffer></audio>-->
+    <div class="level1-1">      
+      <div id="sprite" class="mario mario-stand-right">&nbsp;</div>  
+    </div>    
+  </body>
+</html>

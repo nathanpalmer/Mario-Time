@@ -1,0 +1,51 @@
+.level1-1
+{
+  background: url('images/SuperMarioBros3Map1-1.png');
+  height: 52px;
+  padding-top: 380px;
+}
+
+.mario
+{
+  background: url('images/super-mario-bros-3-mario-sprites-sheet.png') top left no-repeat;
+  width: 46px;
+  height: 40px; 
+}
+
+/* 46 width each */
+
+
+.mario-stand-right
+{
+  background-position: -300px -280px;
+}
+
+.mario-walk-right
+{
+  background-position: -346px -280px;
+}
+
+.mario-stand-left
+{
+  background-position: -254px -279px;
+}
+
+.mario-walk-left
+{
+  background-position: -208px -279px;
+}
+
+.mario-walk-right-2
+{
+  background-position: -392px -280px;
+}
+
+.mario-crouch-right
+{
+  background-position: -506px -276px;
+}
+
+.mario-crouch-left
+{
+  background-position: -46px -276px;
+}
