@@ -14,8 +14,8 @@
       var transitions = [
           { currentClass: 'mario-stand', nextClass: 'mario-walk', movePixels: 0, loop: false },
           { currentClass: 'mario-walk', nextClass: 'mario-stand', movePixels: 10, loop: false }
-        ];;
-    
+      ];
+      
       function walk() {
         var sprite = $('#sprite');
         var duration = 100;
@@ -45,9 +45,14 @@
         if (sprite.hasClass('facing-left')) {
           sprite.removeClass('facing-left');
           sprite.addClass('facing-right');
+          sprite.addClass('changed-direction');
+        } else {
+          if (sprite.hasClass('changed-direction')) {
+            sprite.removeClass('changed-direction');
+          } else {
+            walk();
+          }
         }
-        
-        walk();
       }
       
       function walkLeft() {
@@ -55,9 +60,14 @@
         if (sprite.hasClass('facing-right')) {
           sprite.removeClass('facing-right');
           sprite.addClass('facing-left');
+          sprite.addClass('changed-direction');
+        } else {
+          if (sprite.hasClass('changed-direction')) {
+            sprite.removeClass('changed-direction');
+          } else {
+            walk();
+          }
         }
-        
-        walk();
       }
       
       function keyDownHandler(e) {
@@ -76,7 +86,7 @@
             break;
             
           // Right
-          case 39:           
+          case 39:            
             walkRight();
             break;
         }
@@ -94,12 +104,10 @@
             
           // Left
           case 37:
-            walkLeft();
-            break;
-            
           // Right
-          case 39:           
-            walkRight();
+          case 39:
+            sprite.removeClass('mario-walk');
+            sprite.addClass('mario-stand');
             break;
         }
       }
