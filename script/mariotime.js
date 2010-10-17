@@ -1,3 +1,4 @@
+var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 var transitions = [
     { currentClass: 'mario-stand', nextClass: 'mario-walk', movePixels: 0 },
     { currentClass: 'mario-walk', nextClass: 'mario-stand', movePixels: 10 }
@@ -10,8 +11,7 @@ function walk(keyUp) {
   for(i=0;i<transitions.length;i++) {
     var t = transitions[i];
     if (sprite.hasClass(t.currentClass) && !keyUp || t.currentClass == 'mario-walk' && keyUp) {
-        sprite.removeClass(t.currentClass);
-        sprite.addClass(t.nextClass);
+        sprite.swapClass(t.currentClass,t.nextClass);
                     
         if (t.movePixels) {                
           var marginLeft = parseInt(sprite.css('margin-left').replace('px',''))+(t.movePixels * (sprite.hasClass('facing-left') ? -1 : 1));
@@ -28,8 +28,7 @@ function walkDirection(direction, keyUp) {
   var oppositeDirection = (direction == 'left' ? 'right' : 'left');
   
   if (sprite.hasClass('facing-' + oppositeDirection)) {
-    sprite.removeClass('facing-' + oppositeDirection);
-    sprite.addClass('facing-' + direction);
+    sprite.swapClass('facing-' + oppositeDirection,'facing-' + direction);
     sprite.addClass('changed-direction');
   } else {
     if (sprite.hasClass('changed-direction')) {
@@ -38,7 +37,22 @@ function walkDirection(direction, keyUp) {
       walk(keyUp);
     }
   }
-}      
+}
+
+function playEffect(name) {
+  if (is_chrome) {
+    var aud = new Audio('effects/' + name);
+    aud.play();
+  }
+}
+
+$.fn.swapClass = function(firstClass, secondClass) {
+  return this.each(function() {
+    obj = $(this);
+    obj.removeClass(firstClass);
+    obj.addClass(secondClass);
+  });
+};
 
 function keyDownHandler(e) {
   var sprite = $('#sprite');
@@ -46,8 +60,12 @@ function keyDownHandler(e) {
   {
     // Down
     case 40:
-      sprite.removeClass('mario-stand');
-      sprite.addClass('mario-crouch');            
+      sprite.swapClass('mario-stand','mario-crouch');
+      break;
+      
+    // Space
+    case 32:
+      playEffect('smb3_jump.mp3');
       break;
       
     // Left
@@ -68,8 +86,7 @@ function keyUpHandler(e) {
   {
     // Down
     case 40:
-      sprite.removeClass('mario-crouch');
-      sprite.addClass('mario-stand');
+      sprite.swapClass('mario-crouch','mario-stand');
       break;
       
     // Left
@@ -85,5 +102,5 @@ function keyUpHandler(e) {
 
 $(document).ready(function() {
   $(window).keydown(keyDownHandler);
-  $(window).keyup(keyUpHandler);
+  $(window).keyup(keyUpHandler);     
 });
