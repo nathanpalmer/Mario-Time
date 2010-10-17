@@ -12,17 +12,17 @@
     
     <script type="text/javascript">
       var transitions = [
-          { currentClass: 'mario-stand', nextClass: 'mario-walk', movePixels: 0, loop: false },
-          { currentClass: 'mario-walk', nextClass: 'mario-stand', movePixels: 10, loop: false }
+          { currentClass: 'mario-stand', nextClass: 'mario-walk', movePixels: 0 },
+          { currentClass: 'mario-walk', nextClass: 'mario-stand', movePixels: 10 }
       ];
       
-      function walk() {
+      function walk(keyUp) {
         var sprite = $('#sprite');
         var duration = 100;
               
         for(i=0;i<transitions.length;i++) {
           var t = transitions[i];
-          if (sprite.hasClass(t.currentClass)) {
+          if (sprite.hasClass(t.currentClass) && !keyUp || t.currentClass == 'mario-walk' && keyUp) {
               sprite.removeClass(t.currentClass);
               sprite.addClass(t.nextClass);
                           
@@ -40,35 +40,21 @@
         }       
       }
       
-      function walkRight() {
+      function walkDirection(direction, keyUp) {
         var sprite = $('#sprite');
-        if (sprite.hasClass('facing-left')) {
-          sprite.removeClass('facing-left');
-          sprite.addClass('facing-right');
+        var oppositeDirection = (direction == 'left' ? 'right' : 'left');
+        if (sprite.hasClass('facing-' + oppositeDirection)) {
+          sprite.removeClass('facing-' + oppositeDirection);
+          sprite.addClass('facing-' + direction);
           sprite.addClass('changed-direction');
         } else {
           if (sprite.hasClass('changed-direction')) {
             sprite.removeClass('changed-direction');
           } else {
-            walk();
+            walk(keyUp);
           }
         }
-      }
-      
-      function walkLeft() {
-        var sprite = $('#sprite');
-        if (sprite.hasClass('facing-right')) {
-          sprite.removeClass('facing-right');
-          sprite.addClass('facing-left');
-          sprite.addClass('changed-direction');
-        } else {
-          if (sprite.hasClass('changed-direction')) {
-            sprite.removeClass('changed-direction');
-          } else {
-            walk();
-          }
-        }
-      }
+      }      
       
       function keyDownHandler(e) {
         var sprite = $('#sprite');
@@ -82,12 +68,12 @@
             
           // Left
           case 37:
-            walkLeft();
+            walkDirection('left');
             break;
             
           // Right
           case 39:            
-            walkRight();
+            walkDirection('right');
             break;
         }
       }
@@ -104,10 +90,11 @@
             
           // Left
           case 37:
+            walkDirection('left',true);
+            break;
           // Right
           case 39:
-            sprite.removeClass('mario-walk');
-            sprite.addClass('mario-stand');
+            walkDirection('right', true);
             break;
         }
       }
